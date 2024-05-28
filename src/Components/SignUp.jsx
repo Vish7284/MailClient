@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -110,9 +111,11 @@ const SignUp = () => {
               <button>SignUp</button>
             </div>
           </form>
-          <div className="mt-8 rounded-2xl bg-rose-200 hover:bg-rose-600 border-blue-800 p-4">
-            <button>Already Have Account! SignIn</button>
-          </div>
+        </div>
+        <div className="mt-8 rounded-2xl bg-rose-200 hover:bg-rose-600 border-blue-800 p-4 text-center">
+          <button>
+            <NavLink to="/">Already Have Account! SignIn</NavLink>
+          </button>
         </div>
       </div>
     </div>
