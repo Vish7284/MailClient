@@ -1,5 +1,5 @@
 import { toHaveErrorMessage } from "@testing-library/jest-dom/matchers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom/cjs/react-router-dom";
 import { authActions } from "../store/auth";
@@ -9,6 +9,12 @@ const SignIn = ()=>{
     const [signEmail,setSignEmail] = useState("");
     const [signPass,setSignPass] = useState("");
     const dispatch = useDispatch();
+var localToken = localStorage.getItem("token");
+    useEffect(()=>{
+      if(localToken){
+        dispatch(authActions.logIn(JSON.parse(localToken)))
+      }
+    },[localToken])
 
     const signEmailCHangeHandler =(e)=>{
         setSignEmail(e.target.value);
@@ -44,8 +50,10 @@ const SignIn = ()=>{
                 throw new Error("signIN NHI HUA",errr)
             }
             const data = await response.json();
-            console.log(data.idToken);
-            dispatch(authActions.logIn())
+            dispatch(authActions.logIn({token : data.idToken , userId: data.email}));
+            localStorage.setItem("token" , JSON.stringify(data.idToken));
+            const cleanEmail = data.email.replace(/[@.]/g,"")
+            localStorage.setItem("cleanEmail" ,JSON.stringify(cleanEmail))
            } catch (error) {
             alert(error)
            }
