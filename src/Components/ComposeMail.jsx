@@ -1,73 +1,96 @@
 import { useState } from "react";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { useSelector } from "react-redux";
-const ComposeMail = () => {
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useDispatch } from "react-redux";
+import { mailActions } from "../store/mail";
+const ComposeMail = (props) => {
   const [sentEmail, setSentEmail] = useState("");
   const [subject, setSubject] = useState("");
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [value, setValue] = useState("");
+  const dispatch = useDispatch();
+  const closeClickHnadler = () => {
+    props.onClose();
+  };
 
-//   const userEmailId = useSelector((state) => state.auth.userId);
-//   console.log(userEmailId);
-//   const cleanEmail = userEmailId.replace(/[@.]/g,"")
-//   console.log(cleanEmail);
   const sentEmailChangeHandler = (e) => {
     setSentEmail(e.target.value);
   };
   const subjectChangeHandler = (e) => {
     setSubject(e.target.value);
   };
-  const editorChangeHandler = (editorState) => {
-    setEditorState(editorState);
-  };
 
   const formSenderHandler = (e) => {
     e.preventDefault();
-    const contentState = editorState.getCurrentContent();
-    const rawContentState = convertToRaw(contentState);
-    const htmlContent = draftToHtml(rawContentState);
+
     const sendingEmailData = {
       sentEmail,
       subject,
-      htmlContent,
+      value,
     };
     console.log(sendingEmailData);
-    const sendingData = async()=>{
-        const cleanEmail = localStorage.getItem("cleanEmail");
-        const reciverCleanEmail = sentEmail.replace(/[@.]/g,"")
-        console.log(cleanEmail);
-        try {
-            const response = await fetch(
-              `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/${reciverCleanEmail}.json`,{
-                method:"POST",
-                body:JSON.stringify(sendingEmailData),
-                headers :{
-                    "Content-Type":"application/json"
-                }
-              }
-            );
-            if(!response.ok){
-                const errmail = await response.json();
-                throw new Error("nhi hua firebase pe save ",errmail)
-            }
-            const dataSent = await response.json();
-            console.log(dataSent);
-
-        } catch (error) {
-            console.log(error);
+    const sendingData = async () => {
+      const senderEmail = localStorage.getItem("cleanEmail");
+      const reciverCleanEmail = JSON.stringify(sentEmail.replace(/[@.]/g, ""));
+    //   localStorage.setItem("receiver",JSON.stringify(reciverCleanEmail))
+    //   console.log(reciverCleanEmail);
+      try {
+    
+        const response = await fetch(
+          `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${senderEmail}/sentBox.json`,
+          {
+            method: "POST",
+            body: JSON.stringify(sendingEmailData),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (!response.ok) {
+          const errmail = await response.json();
+          throw new Error("nhi hua firebase pe save ", errmail);
         }
-    }
+        const dataSent = await response.json();
+        // console.log(sentEmail);
+        dispatch(
+          mailActions.sendMail({ mails: dataSent, receiverId: sentEmail })
+        );
+      } catch (error) {
+        console.log(error);
+      }
+       try {
+         const response = await fetch(
+           `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${reciverCleanEmail}/Inbox.json`,
+           {
+             method: "POST",
+             body: JSON.stringify(sendingEmailData),
+             headers: {
+               "Content-Type": "application/json",
+             },
+           }
+         );
+         if (!response.ok) {
+           const errmail = await response.json();
+           throw new Error("nhi hua firebase pe save ", errmail);
+         }
+         const dataSent = await response.json();
+         // console.log(sentEmail);
+         dispatch(
+           mailActions.sendMail({ mails: dataSent, receiverId: sentEmail })
+         );
+       } catch (error) {
+         console.log(error);
+       }
+    };
 
     sendingData();
-    setEditorState(EditorState.createEmpty());
+
     setSubject("");
     setSentEmail("");
+    setValue("")
   };
   return (
     <div>
-      <div className="m-8 bg-slate-200">
+      <div className="m-8 bg-slate-200 rounded-2xl">
         <form onSubmit={formSenderHandler}>
           <div className="p-4 w-full">
             {/* <label htmlFor="emailsender">to:</label> */}
@@ -83,6 +106,7 @@ const ComposeMail = () => {
           </div>
           <div className="p-4">
             <input
+              id="subject"
               type="text"
               placeholder="Subject Matter"
               className="w-full border-b-2  border-purple-400 p-3 rounded-xl"
@@ -92,23 +116,22 @@ const ComposeMail = () => {
           </div>
           <div className="w=full p-4">
             {/* <textarea  className="w-full h-full"/> */}
-            <Editor
-              toolbarClassName="border-b border-gray-300 mb-2"
-              editorClassName="p-4 border border-gray-300 min-h-[400px]"
-              wrapperClassName="border border-gray-300"
-              editorState={editorState}
-              onEditorStateChange={editorChangeHandler}
-            />
+            <ReactQuill value={value} onChange={setValue} id="editor" />
           </div>
-          <div className="flex justify-between p-4 text-center  ">
-            <button className="rounded-2xl p-4 bg-sky-200 hover:bg-sky-700">
+          <div className=" p-4 text-center  ">
+            <button className="rounded-2xl p-4 bg-sky-200 hover:bg-sky-700 w-full">
               Send
-            </button>
-            <button className="rounded-2xl p-4 bg-rose-200 hover:bg-rose-700">
-              Cancel
             </button>
           </div>
         </form>
+        <div className="p-4 text-center">
+          <button
+            className="rounded-2xl p-4 bg-rose-200 hover:bg-rose-700 w-full"
+            onClick={closeClickHnadler}
+          >
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   );
