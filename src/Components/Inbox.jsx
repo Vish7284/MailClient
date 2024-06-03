@@ -35,8 +35,7 @@ const Inbox = () => {
       }
       setIsLoading(false);
     };
-
-    fetchInboxEmails();
+fetchInboxEmails();
   }, [cleanEmail, dispatch]);
 
   const markAsReadHandler = async (email) => {
