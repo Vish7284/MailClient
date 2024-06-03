@@ -5,11 +5,11 @@ import "./index.css";
 import HomePage from "./Components/HomePage";
 import { Redirect, Route, Switch } from "react-router-dom/cjs/react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom";
-import { useEffect } from "react";
-import ComposeMail from "./Components/ComposeMail";
+import { useEffect} from "react";
+
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLogin);
-  console.log(isLoggedIn);
+
   const history = useHistory();
 
   useEffect(() => {
@@ -28,14 +28,12 @@ function App() {
           <Route path="/signup">
             <SignUp />
           </Route>
-          <Redirect to="/"/>
+          <Redirect to="/" />
         </>
       ) : (
         <>
-          <Route path="/home">
-           
+          <Route path="/Home">
             <HomePage />
-            <ComposeMail/>
           </Route>
         </>
       )}
