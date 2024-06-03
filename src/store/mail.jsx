@@ -1,19 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const IntitialMailsState = { mails: [], receiverId: null };
+const initialMailsState = {
+  mails: [],
+  receiverId: null,
+  unread: [],
+};
 
 const mailSlice = createSlice({
   name: "mail",
-  initialState: IntitialMailsState,
+  initialState: initialMailsState,
   reducers: {
     sendMail(state, action) {
-      state.mails = [...state.mails, action.payload];
+      state.mails.push(action.payload);
       state.receiverId = action.payload.receiverId;
-      console.log(state.receiverId);
-      console.log(state.mails);
     },
     setMails(state, action) {
       state.mails = action.payload;
+      state.unread = state.mails
+        .filter((mail) => !mail.read)
+        .map((mail) => mail.id);
+    },
+    markAsRead(state, action) {
+      const email = state.mails.find((mail) => mail.id === action.payload);
+      if (email) {
+        email.read = true;
+      }
+      state.unread = state.unread.filter((id) => id !== action.payload);
     },
   },
 });

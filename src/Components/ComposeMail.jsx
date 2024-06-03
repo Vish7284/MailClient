@@ -26,6 +26,7 @@ const ComposeMail = (props) => {
       sentEmail,
       subject,
       value,
+      read:false,
     };
     console.log(sendingEmailData);
     const sendingData = async () => {
@@ -73,9 +74,9 @@ const ComposeMail = (props) => {
            throw new Error("nhi hua firebase pe save ", errmail);
          }
          const dataSent = await response.json();
-         // console.log(sentEmail);
+         console.log(sentEmail);
          dispatch(
-           mailActions.sendMail({ mails: dataSent, receiverId: sentEmail })
+           mailActions.sendMail({ mails: dataSent, id: sentEmail })
          );
        } catch (error) {
          console.log(error);
