@@ -5,7 +5,6 @@ import MessageRead from "./MessageRead";
 
 const Inbox = () => {
   const smails = useSelector((state) => state.mails.mails);
-  const unread = useSelector((state) => state.mails.unread);
   const cleanEmail = localStorage.getItem("cleanEmail");
   const [loading, setIsLoading] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState(null);
@@ -13,7 +12,7 @@ const Inbox = () => {
 
   useEffect(() => {
     const fetchInboxEmails = async () => {
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
       try {
         const response = await fetch(
           `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox.json`
@@ -22,7 +21,6 @@ const Inbox = () => {
           throw new Error("Failed to fetch inbox emails.");
         }
         const data = await response.json();
-        console.log(data);
         const loadedEmails = [];
         for (const key in data) {
           loadedEmails.push({
@@ -31,37 +29,51 @@ const Inbox = () => {
           });
         }
 
-        console.log(loadedEmails);
         dispatch(mailActions.setMails(loadedEmails));
       } catch (error) {
         console.error("Error fetching inbox emails:", error);
       }
-      setIsLoading(false); // End loading
+      setIsLoading(false);
     };
 
     fetchInboxEmails();
   }, [cleanEmail, dispatch]);
 
-   const markAsReadHandler = async (email) => {
-     try {
-       await fetch(
-         `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox/${email.id}.json`,
-         {
-           method: "PATCH",
-           headers: {
-             "Content-Type": "application/json",
-           },
-           body: JSON.stringify({ read: true }),
-         }
-       );
-       dispatch(mailActions.markAsRead(email.id));
-       setSelectedEmail(email); 
-     } catch (error) {
-       console.error("Error updating email status:", error);
-     }
-   };
+  const markAsReadHandler = async (email) => {
+    try {
+      await fetch(
+        `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox/${email.id}.json`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ read: true }),
+        }
+      );
+      dispatch(mailActions.markAsRead(email.id));
+      setSelectedEmail(email); // Set the selected email to display in the modal
+    } catch (error) {
+      console.error("Error updating email status:", error);
+    }
+  };
+
+  const deleteEmailHandler = async (emailId) => {
+    try {
+      await fetch(
+        `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox/${emailId}.json`,
+        {
+          method: "DELETE",
+        }
+      );
+      dispatch(mailActions.setDelete(emailId));
+    } catch (error) {
+      console.error("Error deleting email:", error);
+    }
+  };
+
   const closeModalHandler = () => {
-    setSelectedEmail(null); 
+    setSelectedEmail(null); // Close the modal
   };
 
   return (
@@ -77,15 +89,27 @@ const Inbox = () => {
             {smails.map((email) => (
               <li
                 key={email.id}
-                className="flex justify-start bg-cyan-300 rounded-lg mb-4 hover:shadow-2xl p-4 space-x-4"
-                onClick={() => markAsReadHandler(email)}
+                className="flex justify-between bg-cyan-300 rounded-lg mb-4 hover:shadow-2xl p-4 space-x-4"
               >
-                {unread.includes(email.id) && (
-                  <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
-                )}
-                <p>From: {email.sentEmail}</p>
-                <h3>Subject: {email.subject}</h3>
-                <p>Text: {email.value}</p>
+                <div
+                  className="flex space-x-4"
+                  onClick={() => markAsReadHandler(email)}
+                >
+                  {!email.read && (
+                    <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
+                  )}
+                  <div>
+                    <p>From: {email.sentEmail}</p>
+                    <h3>Subject: {email.subject}</h3>
+                    <p>Text: {email.value}</p>
+                  </div>
+                </div>
+                <button
+                  className="bg-red-500 p-2 rounded-2xl"
+                  onClick={() => deleteEmailHandler(email.id)}
+                >
+                  Delete
+                </button>
               </li>
             ))}
           </ul>

@@ -27,6 +27,10 @@ const mailSlice = createSlice({
       }
       state.unread = state.unread.filter((id) => id !== action.payload);
     },
+    setDelete(state,action){
+        state.mails = state.mails.filter((mail) => mail.id !== action.payload );
+        state.unread = state.unread.filter((id) => id !== action.payload)
+    }
   },
 });
 
