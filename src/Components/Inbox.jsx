@@ -2,41 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mailActions } from "../store/mail";
 import MessageRead from "./MessageRead";
+import useFetch from "../CustomHooks/useFetch";
 
 const Inbox = () => {
   const smails = useSelector((state) => state.mails.mails);
   const cleanEmail = localStorage.getItem("cleanEmail");
-  const [loading, setIsLoading] = useState(false);
+  // const [loading, setIsLoading] = useState(false);
   const [selectedEmail, setSelectedEmail] = useState(null);
   const dispatch = useDispatch();
-
+const { data, loading, error } = useFetch(
+  `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox.json`);
+  
   useEffect(() => {
-    const fetchInboxEmails = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox.json`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch inbox emails.");
-        }
-        const data = await response.json();
-        const loadedEmails = [];
-        for (const key in data) {
-          loadedEmails.push({
-            id: key,
-            ...data[key],
-          });
-        }
+    if (data) {
+      dispatch(mailActions.setMails(data));
+    }
+    console.log("effect");
+  }, [ data,dispatch]);
 
-        dispatch(mailActions.setMails(loadedEmails));
-      } catch (error) {
-        console.error("Error fetching inbox emails:", error);
-      }
-      setIsLoading(false);
-    };
-fetchInboxEmails();
-  }, [cleanEmail, dispatch]);
+//    
 
   const markAsReadHandler = async (email) => {
     try {
@@ -104,7 +88,7 @@ fetchInboxEmails();
                   </div>
                 </div>
                 <button
-                  className="bg-red-500 p-2 rounded-2xl"
+                  className="bg-red-500 p-2 rounded-2xl text-white"
                   onClick={() => deleteEmailHandler(email.id)}
                 >
                   Delete

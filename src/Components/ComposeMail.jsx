@@ -53,7 +53,7 @@ const ComposeMail = (props) => {
         const dataSent = await response.json();
         // console.log(sentEmail);
         dispatch(
-          mailActions.sendMail({ mails: dataSent, receiverId: sentEmail })
+          mailActions.sendMail({ mails: dataSent, receiverId: sentEmail,sent:dataSent })
         );
       } catch (error) {
         console.log(error);

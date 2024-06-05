@@ -9,7 +9,7 @@ import { useState } from "react";
 const HomePage = () => {
   const dispatch = useDispatch();
   const [composing, setComposing] = useState(false);
-  const unread = useSelector((state) => state.mails.unread);
+  const unread = useSelector((state) => state.mails.unreadInbox);
   const editorToggler =()=>{
     setComposing((prev) => !prev);
   }
@@ -63,8 +63,7 @@ const HomePage = () => {
               {!composing && <ComposeMail onClose={editorToggler} />}
             </Route>
             <Route path="/*" exact>
-              <Redirect to="/Home" />
-              <p className="text-center">Welcome to the mailBox...</p>
+              <Redirect to="/Home/inbox" />
             </Route>
           </Switch>
         </div>
