@@ -11,7 +11,7 @@ const Inbox = () => {
   const [selectedEmail, setSelectedEmail] = useState(null);
   const dispatch = useDispatch();
 const { data, loading, error } = useFetch(
-  `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox.json`);
+  `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox.json`,{},5000);
   
   useEffect(() => {
     if (data) {
@@ -82,9 +82,9 @@ const { data, loading, error } = useFetch(
                     <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
                   )}
                   <div>
-                    <p>From: {email.sentEmail}</p>
+                    <p>From: {email.senderEmail}</p>
                     <h3>Subject: {email.subject}</h3>
-                    <p>Text: {email.value}</p>
+                    <p>Message: {email.value}</p>
                   </div>
                 </div>
                 <button

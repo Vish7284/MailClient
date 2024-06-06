@@ -6,19 +6,19 @@ import useFetch from "../CustomHooks/useFetch";
 const Sent = () => {
 
 const smails = useSelector((state) => state.mails.sent);
-  const cleanEmail = localStorage.getItem("cleanEmail");
+  const cleanEmail =JSON.parse(localStorage.getItem("cleanEmail"));
 //   const [loading, setIsLoading] = useState(false);
    const [selectedEmail, setSelectedEmail] = useState(null);
 const dispatch = useDispatch();
 
 const { data, loading, error } = useFetch(
-  `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/sentBox.json`
+  `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/sentBox.json`,{}
 );
 useEffect(()=>{
     if(data){
         dispatch(mailActions.setSent(data))
     };
-    console.log("sent effect");
+    console.log("sent effect",data);
 },[data ,dispatch])
   
 //     const fetchSentEmails = async () => {
@@ -50,22 +50,22 @@ useEffect(()=>{
 //   fetchSentEmails();
 // }, [cleanEmail, dispatch]);
 
-const markSentHandler =async(email)=>{
-    try {
-        const response = await fetch(
-          `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/sentBox/${email.id}.json`,{
-            method:"PATCH",
-            body:JSON.stringify({read : true}),
-            headers:{
-                "Content-Type":"application/json"
-            }
-          });
-          dispatch(mailActions.markSentRead(email.id))
-        setSelectedEmail(email)
-    } catch (error) {
-        console.log(error);
-    }
-}
+// const markSentHandler =async(email)=>{
+//     try {
+//         const response = await fetch(
+//           `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/sentBox/${email.id}.json`,{
+//             method:"PATCH",
+//             body:JSON.stringify({read : true}),
+//             headers:{
+//                 "Content-Type":"application/json"
+//             }
+//           });
+//           dispatch(mailActions.markSentRead(email.id))
+//         setSelectedEmail(email)
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
  const deleteEmailHandler = async (emailId) => {
    try {
      await fetch(
@@ -99,15 +99,15 @@ const closeModalHandler =()=>{
               >
                 <div
                   className="flex space-x-4"
-                  onClick={() => markSentHandler(email)}
+                  // onClick={() => markSentHandler(email)}
                 >
-                  {!email.read && (
+                  {/* {!email.read && (
                     <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
-                  )}
+                  )} */}
                   <div>
                     <p>To: {email.sentEmail}</p>
                     <h3>Subject: {email.subject}</h3>
-                    <p>Text: {email.value}</p>
+                    <p>Message: {email.value}</p>
                   </div>
                 </div>
                 <button
