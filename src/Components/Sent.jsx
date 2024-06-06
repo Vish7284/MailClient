@@ -3,12 +3,13 @@ import { useSelector,useDispatch } from "react-redux";
 import { mailActions } from "../store/mail";
 import MessageRead from "./MessageRead";
 import useFetch from "../CustomHooks/useFetch";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 const Sent = () => {
 
 const smails = useSelector((state) => state.mails.sent);
   const cleanEmail =JSON.parse(localStorage.getItem("cleanEmail"));
 //   const [loading, setIsLoading] = useState(false);
-   const [selectedEmail, setSelectedEmail] = useState(null);
+  //  const [selectedEmail, setSelectedEmail] = useState(null);
 const dispatch = useDispatch();
 
 const { data, loading, error } = useFetch(
@@ -79,9 +80,9 @@ useEffect(()=>{
      console.error("Error deleting email:", error);
    }
  };
-const closeModalHandler =()=>{
-    setSelectedEmail(null)
-}
+// const closeModalHandler =()=>{
+//     setSelectedEmail(null)
+// }
   return (
     <div className="bg-sky-100 flex justify-center items-center">
       <div className="m-4">
@@ -97,19 +98,21 @@ const closeModalHandler =()=>{
                 key={email.id}
                 className="flex justify-between bg-cyan-300 rounded-lg mb-4 hover:shadow-2xl p-4 space-x-4"
               >
-                <div
-                  className="flex space-x-4"
-                  // onClick={() => markSentHandler(email)}
-                >
-                  {/* {!email.read && (
+                <NavLink to={`/Home/sent/${email.id}`}>
+                  <div
+                    className="flex space-x-4"
+                    // onClick={() => markSentHandler(email)}
+                  >
+                    {/* {!email.read && (
                     <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
                   )} */}
-                  <div>
-                    <p>To: {email.sentEmail}</p>
-                    <h3>Subject: {email.subject}</h3>
-                    <p>Message: {email.value}</p>
+                    <div>
+                      <p>To: {email.sentEmail}</p>
+                      <h3>Subject: {email.subject}</h3>
+                      <p>Message: {email.value}</p>
+                    </div>
                   </div>
-                </div>
+                </NavLink>
                 <button
                   className="bg-red-500 p-2 rounded-2xl text-white"
                   onClick={() => deleteEmailHandler(email.id)}
@@ -120,9 +123,9 @@ const closeModalHandler =()=>{
             ))}
           </ul>
         )}
-        {selectedEmail && (
-          <MessageRead email={selectedEmail} onClose={closeModalHandler} />
-        )}
+        {/* {selectedEmail && (
+          // <MessageRead email={selectedEmail} onClose={closeModalHandler} />
+        )} */}
       </div>
     </div>
   );

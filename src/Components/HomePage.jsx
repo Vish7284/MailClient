@@ -10,6 +10,8 @@ import Inbox from "./Inbox";
 import Sent from "./Sent";
 import ComposeMail from "./ComposeMail";
 import { useState } from "react";
+import Readmsg from "./Readmsg";
+import ReadSent from "./ReadSent";
 const HomePage = () => {
   const dispatch = useDispatch();
   const [composing, setComposing] = useState(true);
@@ -42,7 +44,9 @@ const HomePage = () => {
         <div className="bg-slate-300 p-4 w-1/6">
           <ul className="space-y-4">
             <li className="font-semibold  hover:border-b-2">
-              <NavLink to="/Home/compose" onClick={editorToggler}>Compose</NavLink>
+              <NavLink to="/Home/compose" onClick={editorToggler}>
+                Compose
+              </NavLink>
             </li>
             <li className="font-semibold hover:border-b-2 space-x-2">
               <NavLink to="/Home/inbox">
@@ -56,17 +60,23 @@ const HomePage = () => {
         </div>
         <div className="flex-1 pt-4 h-screen w-screen">
           <Switch>
-            <Route path="/Home/inbox">
+            <Route path="/Home/inbox" exact>
               <Inbox />
             </Route>
-            <Route path="/Home/sent">
+            <Route path="/Home/sent" exact>
               <Sent />
             </Route>
             <Route path="/Home/compose">
               {!composing && <ComposeMail onClose={editorToggler} />}
             </Route>
+            <Route path="/Home/Inbox/:emailId">
+              <Readmsg />
+            </Route>
+            <Route path ="/Home/sent/:emailId">
+              <ReadSent/>
+            </Route>
             <Route path="/*" exact>
-              <Redirect to="/Home/inbox" />
+              <Redirect to="/Home/inbox"/>
             </Route>
           </Switch>
         </div>

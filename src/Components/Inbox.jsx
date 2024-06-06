@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { mailActions } from "../store/mail";
 import MessageRead from "./MessageRead";
 import useFetch from "../CustomHooks/useFetch";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 
 const Inbox = () => {
   const smails = useSelector((state) => state.mails.mails);
   const cleanEmail = localStorage.getItem("cleanEmail");
   // const [loading, setIsLoading] = useState(false);
-  const [selectedEmail, setSelectedEmail] = useState(null);
+  // const [selectedEmail, setSelectedEmail] = useState(null);
   const dispatch = useDispatch();
 const { data, loading, error } = useFetch(
   `https://mailclient-dfad8-default-rtdb.firebaseio.com/MailBox/${cleanEmail}/Inbox.json`,{},5000);
@@ -35,7 +36,7 @@ const { data, loading, error } = useFetch(
         }
       );
       dispatch(mailActions.markAsRead(email.id));
-      setSelectedEmail(email); // Set the selected email to display in the modal
+      // setSelectedEmail(email); // Set the selected email to display in the modal
     } catch (error) {
       console.error("Error updating email status:", error);
     }
@@ -55,9 +56,9 @@ const { data, loading, error } = useFetch(
     }
   };
 
-  const closeModalHandler = () => {
-    setSelectedEmail(null); // Close the modal
-  };
+  // const closeModalHandler = () => {
+  //   setSelectedEmail(null); // Close the modal
+  // };
 
   return (
     <div className="bg-sky-100 flex justify-center items-center">
@@ -74,19 +75,21 @@ const { data, loading, error } = useFetch(
                 key={email.id}
                 className="flex justify-between bg-cyan-300 rounded-lg mb-4 hover:shadow-2xl p-4 space-x-4"
               >
-                <div
-                  className="flex space-x-4"
-                  onClick={() => markAsReadHandler(email)}
-                >
-                  {!email.read && (
-                    <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
-                  )}
-                  <div>
-                    <p>From: {email.senderEmail}</p>
-                    <h3>Subject: {email.subject}</h3>
-                    <p>Message: {email.value}</p>
+                <NavLink to={`/Home/Inbox/${email.id}`}>
+                  <div
+                    className="flex space-x-4"
+                    onClick={() => markAsReadHandler(email)}
+                  >
+                    {!email.read && (
+                      <span className="h-2 w-2 bg-blue-500 rounded-full m-2"></span>
+                    )}
+                    <div>
+                      <p>From: {email.senderEmail}</p>
+                      <h3>Subject: {email.subject}</h3>
+                      <p>Message: {email.value}</p>
+                    </div>
                   </div>
-                </div>
+                </NavLink>
                 <button
                   className="bg-red-500 p-2 rounded-2xl text-white"
                   onClick={() => deleteEmailHandler(email.id)}
@@ -97,9 +100,9 @@ const { data, loading, error } = useFetch(
             ))}
           </ul>
         )}
-        {selectedEmail && (
+        {/* {selectedEmail && (
           <MessageRead email={selectedEmail} onClose={closeModalHandler} />
-        )}
+        )} */}
       </div>
     </div>
   );
