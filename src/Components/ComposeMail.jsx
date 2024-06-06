@@ -117,7 +117,7 @@ const ComposeMail = (props) => {
               onChange={subjectChangeHandler}
             />
           </div>
-          <div className="w=full p-4">
+          <div className=" p-4">
             {/* <textarea  className="w-full h-full"/> */}
             <ReactQuill value={value} onChange={setValue} id="editor" />
           </div>

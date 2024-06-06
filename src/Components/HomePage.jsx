@@ -41,7 +41,7 @@ const HomePage = () => {
         </div>
       </div>
       <div className="flex flex-1 pt-28">
-        <div className="bg-slate-300 p-4 w-1/6">
+        <div className="fixed top-28 left-0 overflow-auto bg-slate-300 p-4 w-1/6 h-screen">
           <ul className="space-y-4">
             <li className="font-semibold  hover:border-b-2">
               <NavLink to="/Home/compose" onClick={editorToggler}>
@@ -58,7 +58,7 @@ const HomePage = () => {
             </li>
           </ul>
         </div>
-        <div className="flex-1 pt-4 h-screen w-screen">
+        <div className="ml-40 flex-1 pt-4 h-64 w-64">
           <Switch>
             <Route path="/Home/inbox" exact>
               <Inbox />
