@@ -9,16 +9,12 @@ import { Route } from "react-router-dom/cjs/react-router-dom";
 import Inbox from "./Inbox";
 import Sent from "./Sent";
 import ComposeMail from "./ComposeMail";
-import { useState } from "react";
 import Readmsg from "./Readmsg";
 import ReadSent from "./ReadSent";
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [composing, setComposing] = useState(true);
   const unread = useSelector((state) => state.mails.unreadInbox);
-  const editorToggler = () => {
-    setComposing((prev) =>!prev);
-  };
+
   const userEmail = JSON.parse(localStorage.getItem("cleanEmail"));
   const logOutHandler = () => {
     dispatch(authActions.logOut());
@@ -29,7 +25,7 @@ const HomePage = () => {
     <div className="flex flex-col h-screen">
       <div className="fixed top-0 left-0 right-0 bg-rose-100 shadow-lg border-b-8 border-blue-400 p-4 z-50">
         <div className="flex justify-between items-center h-20">
-          <header className="font-bold text-purple-950 text-3xl shadow-2xl">
+          <header className="font-bold text-purple-950 text-3xl uppercase">
             Welcome to MailBOX - {userEmail}
           </header>
           <button
@@ -44,7 +40,7 @@ const HomePage = () => {
         <div className="fixed top-28 left-0 overflow-auto bg-slate-300 p-4 w-1/6 h-screen">
           <ul className="space-y-4">
             <li className="font-semibold  hover:border-b-2">
-              <NavLink to="/Home/compose" onClick={editorToggler}>
+              <NavLink to="/Home/compose" >
                 Compose
               </NavLink>
             </li>
@@ -67,7 +63,7 @@ const HomePage = () => {
               <Sent />
             </Route>
             <Route path="/Home/compose">
-              {!composing && <ComposeMail onClose={editorToggler} />}
+              <ComposeMail />
             </Route>
             <Route path="/Home/Inbox/:emailId">
               <Readmsg />

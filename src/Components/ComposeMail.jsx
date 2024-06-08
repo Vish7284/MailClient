@@ -3,7 +3,8 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useDispatch } from "react-redux";
 import { mailActions } from "../store/mail";
-const ComposeMail = (props) => {
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
+const ComposeMail = () => {
   const [sentEmail, setSentEmail] = useState("");
   const [subject, setSubject] = useState("");
   const [value, setValue] = useState("");
@@ -91,6 +92,11 @@ const ComposeMail = (props) => {
     setSentEmail("");
     setValue("");
   };
+  const onCancel =()=>{
+     setSubject("");
+     setSentEmail("");
+     setValue("");
+  }
   return (
     <div>
       <div className="m-4 bg-slate-200 rounded-2xl">
@@ -128,12 +134,11 @@ const ComposeMail = (props) => {
           </div>
         </form>
         <div className="p-4 text-center">
-          <button
-            className="rounded-2xl p-4 bg-rose-200 hover:bg-rose-700 w-full"
-            onClick={() => props.onClose()}
-          >
-            Cancel
-          </button>
+          <NavLink to="/Home/Inbox">
+            <button className="rounded-2xl p-4 bg-rose-200 hover:bg-rose-700 w-full" onClick={onCancel}>
+              Cancel
+            </button>
+          </NavLink>
         </div>
       </div>
     </div>

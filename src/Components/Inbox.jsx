@@ -36,7 +36,7 @@ const { data, loading, error } = useFetch(
         }
       );
       dispatch(mailActions.markAsRead(email.id));
-      // setSelectedEmail(email); // Set the selected email to display in the modal
+      
     } catch (error) {
       console.error("Error updating email status:", error);
     }
