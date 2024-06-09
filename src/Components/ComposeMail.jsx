@@ -100,7 +100,7 @@ const ComposeMail = () => {
   }
   return (
     <div>
-      <div className="m-4 bg-slate-200 rounded-2xl">
+      <div className="m-4 w-5/6 float-right bg-slate-200 rounded-2xl">
         <form onSubmit={formSenderHandler}>
           <div className="p-4 w-full">
             {/* <label htmlFor="emailsender">to:</label> */}
@@ -126,7 +126,12 @@ const ComposeMail = () => {
           </div>
           <div className=" p-4">
             {/* <textarea  className="w-full h-full"/> */}
-            <ReactQuill value={value} onChange={setValue} id="editor" placeholder="msg..."/>
+            <ReactQuill
+              value={value}
+              onChange={setValue}
+              id="editor"
+              placeholder="msg..."
+            />
           </div>
           <div className=" p-4 text-center  ">
             <button className="rounded-2xl p-4 bg-sky-200 hover:bg-sky-700 w-full">
@@ -136,7 +141,10 @@ const ComposeMail = () => {
         </form>
         <div className="p-4 text-center">
           <NavLink to="/Home/Inbox">
-            <button className="rounded-2xl p-4 bg-rose-200 hover:bg-rose-700 w-full" onClick={onCancel}>
+            <button
+              className="rounded-2xl p-4 bg-rose-200 hover:bg-rose-700 w-full"
+              onClick={onCancel}
+            >
               Cancel
             </button>
           </NavLink>

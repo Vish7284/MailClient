@@ -37,7 +37,7 @@ const HomePage = () => {
         </div>
       </div>
       <div className="flex flex-1 pt-28">
-        <div className="fixed top-28 left-0 overflow-auto bg-slate-300 p-4 w-1/6 h-screen">
+        <div className="fixed top-28 left-0 overflow-auto float-left bg-slate-300 p-4 w-1/6 h-screen">
           <ul className="space-y-4">
             <li className="font-semibold  hover:border-b-2">
               <NavLink to="/Home/compose" >
@@ -54,7 +54,7 @@ const HomePage = () => {
             </li>
           </ul>
         </div>
-        <div className="ml-40 flex-1 pt-4 h-screen w-5/6 bg-stone-400">
+        <div className=" p-6 float-right flex-1 pt-4 h-screen w-5/6 bg-stone-400">
           <Switch>
             <Route path="/Home/inbox" exact>
               <Inbox />
