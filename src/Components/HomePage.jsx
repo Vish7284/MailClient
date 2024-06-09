@@ -54,7 +54,7 @@ const HomePage = () => {
             </li>
           </ul>
         </div>
-        <div className="ml-40 flex-1 pt-4 h-64 w-64">
+        <div className="ml-40 flex-1 pt-4 h-screen w-5/6 bg-stone-400">
           <Switch>
             <Route path="/Home/inbox" exact>
               <Inbox />

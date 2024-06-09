@@ -63,7 +63,7 @@ const { data, loading, error } = useFetch(
   return (
     <div className="bg-sky-100 flex justify-center items-center">
       <div className="m-4">
-        <h2 className="text-center">Inbox</h2>
+        <h2 className="text-center font-bold">Inbox</h2>
         {loading ? (
           <p>Loading...</p>
         ) : smails.length === 0 ? (

@@ -87,6 +87,7 @@ const ComposeMail = () => {
     };
 
     sendingData();
+    
 
     setSubject("");
     setSentEmail("");
@@ -125,7 +126,7 @@ const ComposeMail = () => {
           </div>
           <div className=" p-4">
             {/* <textarea  className="w-full h-full"/> */}
-            <ReactQuill value={value} onChange={setValue} id="editor" />
+            <ReactQuill value={value} onChange={setValue} id="editor" placeholder="msg..."/>
           </div>
           <div className=" p-4 text-center  ">
             <button className="rounded-2xl p-4 bg-sky-200 hover:bg-sky-700 w-full">

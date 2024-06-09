@@ -1,4 +1,4 @@
-import 'global';
+// import 'global';
 import React from "react";
 import ReactDOM from "react-dom/client"; 
 import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min.js";
