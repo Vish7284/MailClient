@@ -108,7 +108,9 @@ const SignUp = () => {
             {passMatch && <p>Password Matched</p>}
             {!passMatch && conPass.length > 0 && <p>Password Not Matched</p>}
             <div className="text-center rounded-3xl bg-sky-300 hover:bg-sky-700 mt-6 p-4">
-              <button>SignUp</button>
+              <NavLink to="/">
+                <button>SignUp</button>
+              </NavLink>
             </div>
           </form>
         </div>
