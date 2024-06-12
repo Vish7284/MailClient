@@ -51,7 +51,7 @@ const SignUp = () => {
         }
         const data = await response.json();
         console.log(data.idToken);
-        prompt("User SignUP Successfully");
+        alert("User SignUP Successfully");
       } catch (error) {
         console.log(error);
       }
